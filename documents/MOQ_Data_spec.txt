@@ -1,0 +1,561 @@
+MOD_PR13A1       250m/500m  16 days VI Product
+HDF-EOS V2 MODIS VEGETATION INDICES HDF File Specification
+
+Version:	V6.0.12
+Revision:	1
+Date:		11 October 2013
+Product ID:	MOD13A1 
+ESDT:		MOD13Q1/MOD13A1
+Product name: 16 days 250m/500m Vegetation Index
+Product Level:	3
+PGE:		25
+
+Note:
+=====
+This file is for the 250m resolution product, a similar 500m 
+product has the same specification with 500m instead.
+Under 250m only production, the 250m product will not have
+any reference to the EVI, blue, MIR parameters.
+
+
+Product ID(s): MOD13 L3: MOD_PR13Q1/A1
+
+Point of Contact:        Kamel Didan
+               Terrestrial Biophysics and Remote Sensing Group (TBRS)
+               1200 E South Campus Drive, Room 429, Shantz Bldg. #38,
+               Department of Soil, Water and Environmental Science,
+               University of Arizona, Tucson, AZ 85721, USA
+               Office 520 621 8514; Fax 520 621 1791
+               kamel@ag.arizona.edu
+     
+Principal Investigator:  Alfredo Huete
+               Terrestrial Biophysics and Remote Sensing Group (TBRS)
+               1200 E South Campus Drive, Room 429, Shantz Bldg. #38,
+               Department of Soil, Water and Environmental Science,
+               University of Arizona, Tucson, AZ 85721, USA
+               Office 520 621 3228; Fax 520 621 5401
+               ahuete@ag.arizona.edu
+
+			         Kamel Didan
+               Terrestrial Biophysics and Remote Sensing Group (TBRS)
+               1200 E South Campus Drive, Room 429, Shantz Bldg. #38,
+               Department of Soil, Water and Environmental Science,
+               University of Arizona, Tucson, AZ 85721, USA
+               Office 520 621 8514; Fax 520 621 1791
+               kamel@ag.arizona.edu
+
+The at launch MOD13 algorithm will allow the individual processing of two
+vegetation indices at different spatial and temporal resolution. The Level 3 HDF
+filespec will therefore be split in 6 files/products (MOD13Q1, MOD13A1, MOD13A2,
+MOD13A3, MOD13C1, MOD13C2) that each have commonalities with respect
+to spatial and spectral resolutions. The standard DAAC production run will
+process the NDVI/EVI at 250 m,500m,1km, and 0.05 Deg. resolution for 16-day and Monthly 
+intervals. The output products will have datafields for the NDVI and EVI with
+corresponding QA, reflectance data, angular information and spatial statistics
+and std-dev of each VI and for the CMG  scales.
+
+
+
+
+
+Generic Constructs
+
+ECS Metadata Strings:
+Notes:    "FR" is an abbreviation for "FREE_RANGE".
+          "D/T" is an abbreviation for "DATE/TIME"
+          (A) implies that multiple values are stored within a   single array.
+          A value of "Variable" indicates that this value will vary accoriding to the granule being processed.
+          "M" mean class M.
+
+CoreMetadata.0
+
+This string will contain the following PVL fields:
+
+Field Name                Data Type      # of Values     Value
+ GROUP = INVENTORYMETADATA
+
+   GROUP = CollectionDescriptionClass
+          *SHORTNAME        STRING     1    "MOD13Q1/MOD13A1/MYD13Q1/MYD13A1"
+          *VERSIONID        STRING     1    "6"
+   END_GROUP = CollectionDescriptionClass
+
+
+   GROUP = ECSDataGranule
+          *SIZEMBECSDATAGRANULE  FLOAT        1    Variable
+          *REPROCESSINGPLANNED   STRING      1    "no further update  anticipated"
+          *REPROCESSINGACTUAL    STRING      1    "processed once"
+          *LOCALGRANULEID       TRING         1    Variable
+          *DAYNIGHTFLAG        STRING         1    Variable
+          *PRODUCTIONDATETIME  D/T            1    Variable
+          LOCALVERSIONID       STRING         1    Variable
+   END_GROUP = ECSDataGranule
+
+   GROUP = PGEVersionClass
+          *PGEVERSION     STRING       1    "6.0.0" or Variable
+   END_GROUP = PGEVersionClass
+
+   GROUP = InputGranule
+          *INPUTPOINTER                   STRING    FR    Variable      (A)
+   END_GROUP = InputGranule
+
+GROUP = RangeDateTime
+	RANGEENDINGDATE		D		1		Variable
+	RANGEENDINGTIME		T		1		23.59.59	
+	RANGEBEGINNINGDATE	D		1		Variable
+	RANGEBEGINNINGTIME	T		1		00.00.00
+END_GROUP = RangeDateTime
+
+GROUP = SpatialDomainContainer
+  GROUP = HorizontalSpatialDomainContainer
+    GROUP = GPolygon
+      GROUP = GRing
+	EXCLUSIONGRINGFLAG          STRING     1   "N"
+      END_GROUP = GRing
+
+      GROUP = GRingPoint
+	GRINGPOINTLATITUDE          DOUBLE   4(A)  Variable
+	GRINGPOINTLONGITUDE         DOUBLE   4(A)  Variable
+	GRINGPOINTSEQUENCENO        INTEGER  4(A)  Variable
+      END_GROUP = GRingPoint
+   END_GROUP = GPolygon
+  END_GROUP = HorizontalSpatialDomainContainer
+END_GROUP = SpatialDomainContainer
+   
+   GROUP = MeasuredParameter
+          *PARAMETERNAME                 STRING    FR Variable   (A)
+
+     GROUP = QAFlags
+             AUTOMATICQUALITYFLAG            STRING  1       "No automatic quality assessment is performed in the PGE"
+             AUTOMATICQUALITYFLAGEXPLANATION STRING  1       "Pass"
+             SCIENCEQUALITYFLAG              STRING  1       "Not Investigated"
+             SCIENCEQUALITYFLAGEXPLANATION   STRING  1       "See http://landweb.nascom.nasa.gov/cgi-bin/QA_WWW/qaFlagPage.cgi?sat=terra (or ?sat=aqua) for the product Science Quality status"
+     END_GROUP = QAFlags
+
+     GROUP = QAStats
+          QAPERCENTINTERPOLATEDDATA       INTEGER    1    Variable
+          QAPERCENTMISSINGDATA           INTEGER    1    Variable
+          QAPERCENTOUTOFBOUNDSDATA        INTEGER    1    Variable
+          QAPERCENTCLOUDCOVER             INTEGER    1    Variable
+     END_GROUP = QAStats
+   END_GROUP = MeasuredParameter
+
+   GROUP = AssociatedPlatformInstrumentSensor
+          ASSOCIATEDPLATFORMSHORTNAME    STRING     1   "Terra/Aqua"
+          ASSOCIATEDSENSORSHORTNAME      STRING     1   "MODIS"
+          ASSOCIATEDINSTRUMENTSHORTNAME  STRING     1   "MODIS"
+   END_GROUP = AssociatedPlatformInstrumentSensor
+
+  
+   GROUP = AdditionalAttributes
+          ADDITIONALATTRIBUTENAME  STRING        FR Variable  (A)
+          PARAMETERVALUE           STRING        FR Variable  (A)
+       
+	       ADDITIONALATTRIBUTENAME.1  = QAPERCENTGOODQUALITY
+	       ADDITIONALATTRIBUTENAME.2  = QAPERCENTOTHERQUALITY
+	       ADDITIONALATTRIBUTENAME.3  = QAPERCENTNOTPRODUCEDCLOUD
+	       ADDITIONALATTRIBUTENAME.4  = QAPERCENTNOTPRODUCEDOTHER
+	       ADDITIONALATTRIBUTENAME.5  = NDVI250M16DAYQCLASSPERCENTAGE
+	       ADDITIONALATTRIBUTENAME.6  = EVI250M16DAYQCLASSPERCENTAGE
+	       ADDITIONALATTRIBUTENAME.7  = HORIZONTALTILENUMBER
+	       ADDITIONALATTRIBUTENAME.8  = VERTICALTILENUMBER
+               ADDITIONALATTRIBUTENAME.9  = TILEID
+	       ADDITIONALATTRIBUTENAME.10  = INPUTPRODUCTRESOLUTION
+	       ADDITIONALATTRIBUTENAME.11  = identifier_product_doi
+	       ADDITIONALATTRIBUTENAME.12  = identifier_product_doi_authority
+   END_GROUP = AdditionalAttributes
+
+
+ END_GROUP = INVENTORYMETADATA
+
+
+Product metadata.0
+ArchiveMetadata.0
+This string will contain the following PVL fields:
+                                                  # of
+Field Name               Data Type       # of Values     Value
+ GROUP = ARCHIVEMETADATA
+
+   ***** MODLAND Mandatory V2 archive metadata ***************************
+
+   GROUP = BoundingRectangle
+          *WESTBOUNDINGCOORDINATE              DOUBLE     1    Variable
+          *NORTHBOUNDINGCOORDINATE             DOUBLE     1    Variable
+          *EASTBOUNDINGCOORDINATE              DOUBLE     1    Variable
+          *SOUTHBOUNDINGCOORDINATE             DOUBLE     1    Variable
+   END_GROUP = BoundingRectangle
+
+	ALGORITHMPACKAGEACCEPTANCEDATE		STRING	1		"2004-10-01"
+	ALGORITHMPACKAGEMATURITYCODE		STRING	1		"Normal"
+	ALGORITHMPACKAGENAME		        STRING	1		"MOD_PR13A1"
+	ALGORITHMPACKAGEVERSION			STRING	1		"6"
+	INSTRUMENTNAME				STRING	1		"MODIS"
+	LONGNAME			        STRING	1		"MODIS/Terra (Aqua) Vegetation Indices 16 days L3 Global 250m SIN Grid"
+	PROCESSINGCENTER			STRING	1		"MODAPS"
+  PROCESSINGENVIRONMENT			STRING	1		Variable
+  *INPUTFILENAME                   STRING    FR    Variable      (A)
+  CHARACTERISTICBINANGULARSIZE    DOUBLE  1   Variable
+  CHARACTERISTICBINSIZE           DOUBLE  1   Variable
+  DATACOLUMNS                     INTEGER 1   Variable
+  DATAROWS                        INTEGER 1   Variable
+  GLOBALGRIDCOLUMNS               INTEGER 1   Variable
+  GLOBALGRIDROWS                  INTEGER 1   Variable
+  SPSOPARAMETERS		  STRING	1		2749,4334, 2749a,4334a
+  PERCENTLAND			  INTEGER	1		Variable
+	PRODUCTIONTYPE		  STRING	1		Variable
+	DESCRrevision						        STRING   FR Variable
+ 	GEOANYABNORMAL		  STRING   1  "True/False"
+	GEOESTMAXRMSERROR	  DOUBLE  1 Variable
+	QAPERCENTPOORQ250MOR500M16DAYNDVI INTEGER FR Variable
+	QAPERCENTPOORQ250MOR500M16DAYEVI  INTEGER FR Variable
+	QA_STRUCTURE_STYLE            STRING   1 "C5 or later"
+ END_GROUP = ARCHIVEMETADATA
+
+StructuralMetadata.0
+This string will be populated automatically by HDF-EOS.
+
+Under 250m + 500m Production
+
+Grid Structure:  MOD_Grid_16DAY_250m_500m_VI
+Dimensions:
+Dimension   Dimension                  Name                Value
+Dimension_1               Ydim:        MODIS_Grid_250m_VI        "Data Rows"
+Dimension_2               Xdim:        MODIS_Grid_250m_VI        "Data Columns"
+
+Under 500m Only Production
+
+Grid Structure:  MOD_Grid_16DAY_500m_VI
+Dimensions:
+Dimension   Dimension                  Name                Value
+Dimension_1               Ydim:      MODIS_Grid_500m_VI        "Data Rows"
+Dimension_2  	          Xdim:      MODIS_Grid_500m_VI        "Data Columns"
+
+Corner Locations:    Corner                Values
+UpperLeftPointMtrs    (Variable, Variable)
+LowerRightPointMtrs   (Variable, Variable)
+Geographic Grid Projection Parameters 
+
+Supported Grids: Geographic Grid Integerized Sinusoidal
+Interrupted Goodes Homolosine
+Projection gridID = GCTP_GEO
+ProjParam[0]          not used
+ProjParam[1]          not used
+ProjParam[2]          not used
+ProjParam[3]          not used
+ProParam[4]           not used
+ProjParam[5]          not used
+ProjParam[6]          not used
+ProjParam[7]          not used
+ProjParam[8]          not used
+ProjParam[9]          not used
+ProjParam[10]         not used
+ProjParam[11]         not used
+ProjParam[12]         not used
+Spherecode            not used
+GridOrigin            HDFE_GD_UL
+
+Projection gridID = GCTP_ISINUS
+                                                               
+ProjParam[0]          6371007.181
+ProjParam[1]          TBD
+ProjParam[2]          0.0
+ProjParam[3]          0.0
+ProjParam[4]          0.0
+ProjParam[5]          0.0
+ProjParam[6]          0.0
+ProjParam[7]          0.0
+ProjParam[8]          21600
+ProjParam[9]          0.0
+ProjParam[10]         1.0
+ProjParam[11]         0.0
+ProjParam[12]         0.0
+Spherecode            -1
+GridOrigin            HDFE_GD_UL
+
+Projection gridID     GCTP_GOOD
+ProjParam[0]          not used
+ProjParam[1]          not used
+ProjParam[2]          not used
+ProjParam[3]          not used
+ProjParam[4]          not used
+ProjParam[5]          not used
+ProjParam[6]          not used
+ProjParam[7]          not used
+ProjParam[8]          not used
+ProjParam[9]          not used
+ProjParam[10]         not used
+ProjParam[11]         not used
+ProjParam[12]         not used
+Spherecode            19
+GridOrigin            HDFE_GD_UL
+
+
+ 
+   Global HDF Attributes
+                     Number of             Values or
+                                 Max.
+Attribute  Data          String         Value       Type           Length
+
+	Characteristic  FLOAT32         1         Variable         Bin Angular Size
+	Characteristic  FLOAT32         1         Variable         Bin Size
+	Data Columns    UINT16          1         Variable
+	Data Rows       UINT16          1         Variable
+	Days of Year    UINT16          "Number of Days"        Variable
+	DaysProcessed   UINT16          "Number of Days"        Variable
+	Global Grid     UINT32          1               Variable                Columns
+	Global Grid     UINT32          1               Variable                Rows
+	Number of Days  UINT16          1               Variable
+
+DataFields:
+
+A value of "Variable" indicates that this value will vary according to the granule being processed.
+
+DataField    Name                        Data      Dimensions
+                                         Type
+
+DataFields:
+
+All data stored within DataFields that contain the HDF attributes "scale_factor" and "add_offset" are scaled
+according to the following data conversion:
+
+      file data=(parameter * scale_factor) + add_offset
+      parameter=(file data - add_offset)/scale_factor
+
+A value of "Variable" indicates that this value will vary according to the granule being processed.
+
+Data field     Name              Data type Dimension
+DataField_1    250m 16 days NDVI INT16     Dimension_1
+                                           Dimension_2
+DataField_1 HDF Attributes:
+Attribute      Data Type Number of Values  Value
+                         or Max. String
+                         Length
+long_name      STRING         17           250m 16 days NDVI
+units          STRING         4            NDVI
+valid_range    INT16          2            -2000, 10000
+_FillValue     INT16          1            -3000
+scale_factor   FLOAT64        1            10000
+scale_factor_err              FLOAT64      1    0.0
+add_offset     FLOAT64        1            0.0
+add_offset_err FLOAT64        1            0.0
+calibrated_nt  INT32          1            5
+
+
+Data field     Name              Data type Dimension
+DataField_2    250m 16 days EVI INT16     Dimension_1
+                                          Dimension_2
+DataField_2 HDF Attributes:
+Attribute      Data Type Number of Values  Value
+                         or Max. String
+                         Length
+long_name      STRING         17           250m 16 days EVI
+units          STRING         4            EVI
+valid_range    INT16          2            -2000, 10000
+_FillValue     INT16          1            -3000
+scale_factor   FLOAT64        1            10000
+scale_factor_err              FLOAT64      1    0.0
+add_offset     FLOAT64        1            0.0
+add_offset_err FLOAT64        1            0.0
+calibrated_nt  INT32          1            5
+
+
+Data field   Name                Data type Dimension
+DataField_3  250m 16 days VI Quality     UINT16    Dimension_1
+                                           Dimension_2
+Bit          Description
+0-1      NDVI quality
+         00 VI produced, good quality;
+         01 VI produced, but check other QA
+         10 (pixel not produced due to cloud effects)
+				 		produced but most likley cloudy pixel
+         11 pixel not produced due to other reasons than clouds
+2-5      VI usefulness
+         four bit range 0= highest quality 13 quality so low that it is not useful, 
+	    14 L1B data faulty, 15 not useful for any other reason/not processed
+6-7      aerosol quantity:
+          climatology (00), low (01),  average (10), high (11) 
+8        Adjacent cloud detected; (1)  YES,   (0)  NO
+9        YES (1) NO (0) atmosphere BRDF correction performed
+10       mixed clouds YES (1) NO (0)mixed clouds
+11-13    Land/Water flag  
+		000 ocean; 
+		001: Land (Nothing else but land) 
+		010: Ocean coastlines and lake shorelines 
+		011: Shallow inland water 
+		100: Ephemeral water 
+		101: Deep inland water 
+		110: Moderate or continental ocean 
+		111: Deep ocean 
+14       0 NO; 1 YES possible snow/ice
+15       0 NO; 1 YES possible shadow
+
+
+DataField_4     250m 16 days red reflectance    INT16   Dimension_1
+                                                        Dimension_2
+        DataField_4 HDF Attributes:
+        Attribute       Data Type       Number of Values        Value
+                                        or Max. String
+                                        Length
+
+        long_name       STRING          28      250m 16 days red  reflectance
+        units           STRING          11      reflectance
+        valid_range     INT16           2       0, 10000
+        _FillValue      INT16           1       -1000
+        scale_factor    FLOAT64         1       10000
+        scale_factor_err FLOAT64        1       0.0
+        add_offset      FLOAT64         1       0.0
+        add_offset_err  FLOAT64         1       0.0
+        calibrated_nt   INT32           1       5
+
+
+DataField_5     250m 16 days NIR reflectance    INT16   Dimension_1
+                                                        Dimension_2
+        DataField_5 HDF Attributes:
+        Attribute       Data Type       Number of Values        Value
+                                        or Max. String
+                                        Length
+
+        long_name       STRING          28      250m 16 days NIR reflectance
+        units           STRING          11      reflectance
+        valid_range     INT16           2       0, 10000
+        _FillValue      INT16           1       -1000
+        scale_factor    FLOAT64         1       10000
+        scale_factor_err FLOAT64        1       0.0
+        add_offset      FLOAT64         1       0.0
+        add_offset_err  FLOAT64         1       0.0
+        calibrated_nt   INT32           1       5
+
+
+DataField_6     250m 16 days blue reflectance   INT16   Dimension_1
+                                                        Dimension_2
+
+        DataField_6 HDF Attributes:
+        Attribute       Data Type       Number of Values        Value
+                                        or Max. String
+                                        Length
+
+        long_name       STRING  29      250m 16 days blue  reflectance
+        units           STRING  11      reflectance
+        valid_range     INT16   2       0, 10000
+        _FillValue      INT16   1       -1000
+        scale_factor    FLOAT64 1       10000
+        scale_factor_err FLOAT64        1       0.0
+        add_offset      FLOAT64 1       0.0
+        add_offset_err  FLOAT64 1       0.0
+        calibrated_nt   INT32   1       5
+
+
+DataField_7     250m 16 days MIR reflectance    INT16   Dimension_1
+                                                        Dimension_2
+        DataField_7 HDF Attributes:
+        Attribute       Data Type       Number of Values        Value
+                                        or Max. String
+                                        Length
+
+        long_name       STRING          28      250m 16 days MIR reflectance
+        units           STRING          11      reflectance
+        valid_range     INT16           2       0, 10000
+        _FillValue      INT16           1       -1000
+        scale_factor    FLOAT64         1       10000
+        scale_factor_err        FLOAT64 1       0.0
+        add_offset      FLOAT64         1       0.0
+        add_offset_err  FLOAT64         1       0.0
+        calibrated_nt   INT32           1       5
+Legend:	 MIR band specification: 
+ 				 The MIR band saved in the VI product is MODIS band 7 
+				 Bandwidth  :2105-2155 nm 
+				 Band center:2130 nm 
+
+
+DataField_8     250m 16 days view zenith angle  INT16   Dimension_1
+                                                        Dimension_2
+        DataField_8 HDF Attributes:
+        Attribute       Data Type       Number of Values        Value
+                                        or Max. String
+                                        Length
+
+        long_name       STRING          38      250m 16 days average view
+                                                        zenith angle
+        units           STRING          7       degrees
+        valid_range     INT16           2       -9000, 9000
+        _FillValue      INT16           1       -10000
+        scale_factor    FLOAT64         1       100
+        scale_factor_err        FLOAT64 1       0.0
+        add_offset      FLOAT64         1       0.0
+        add_offset_err  FLOAT64         1       0.0
+        calibrated_nt   INT32           1       5
+
+
+DataField_9    250m 16 days sun zenith angle   INT16   Dimension_1
+                                                       Dimension_2
+        DataField_9 HDF Attributes:
+        Attribute       Data Type       Number of Values        Value
+                                        or Max. String
+                                        Length
+
+        long_name       STRING          37      250m 16 days average sun
+                                                        zenith angle
+        units           STRING          7       degrees
+        valid_range     INT16           2       -9000, 9000
+        _FillValue      INT16           1       -10000
+        scale_factor    FLOAT64         1       100
+        scale_factor_err FLOAT64        1       0.0
+        add_offset      FLOAT64         1       0.0
+        add_offset_err  FLOAT64         1       0.0
+        calibrated_nt   INT32           1       5
+
+
+DataField_10    250m 16 days relative azimuth angle  INT16 Dimension_1
+                                                           Dimension_2
+        DataField_10 HDF Attributes:
+        Attribute       Data Type       Number of Values        Value
+                                        or Max. String
+                                        Length
+
+        long_name       STRING          43      250m 16 days average relative
+                                                        azimuth angle
+        units           STRING          7       degrees
+        valid_range     INT16           2       -3600, 3600
+        _FillValue      INT16           1       -4000
+        scale_factor    FLOAT64         1       10
+        scale_factor_err FLOAT64        1       0.0
+        add_offset      FLOAT64         1       0.0
+        add_offset_err  FLOAT64         1       0.0
+        calibrated_nt   INT32           1       5
+
+DataField_11	250m 16 days composite day of the year INT16			Dimension_1	
+										Dimension_2
+
+DataField_11 HDF Attributes:
+
+Attribute			Data Type		Number of Values	Value or Max. String Length
+
+long_name			STRING			38		250m 16 days composite day of the year
+units				STRING			22	     	Julian day of the year
+valid_range			INT16			2		1, 366
+_FillValue			INT16		     	1		-1
+
+
+Data field		Name						Data type	Dimension
+
+DataField_12		250m 16 days pixel reliability	INT8	Dimension_1	
+												Dimension_2
+
+DataField_12 HDF Attributes:
+
+Attribute		Data Type	Number of Values	Value or Max. String Length
+
+long_name		STRING			30		250m 16 days pixel reliability
+units			STRING			4		rank
+valid_range		INT8			2		0, 3
+_FillValue		INT8			1		-1
+
+
+*******************************************************************************
+The 250m 16 days pixel realiability is a summary of all QA indicating how reliable the 
+data/pixel is:
+	-1 : No data, FILL value
+	 0 : Good data, use with confidence
+	 1 : Marginal data, Useful, but look at other QA information
+	 2 : Snow/Ice Target covered with snow/ice
+	 3 : Cloudy data.
+*******************************************************************************
